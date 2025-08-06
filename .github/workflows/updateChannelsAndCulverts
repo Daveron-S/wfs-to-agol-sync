@@ -1,4 +1,4 @@
-name: Sync WFS to AGOL
+name: Sync Channel and Culvert WFS to AGOL
 
 on:
   schedule:
