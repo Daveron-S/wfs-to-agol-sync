@@ -1,4 +1,4 @@
-name: Sync Channel and Culvert WFS to AGOL
+name: Sync Spatial Flood Defences WFS to AGOL
 
 on:
   schedule:
