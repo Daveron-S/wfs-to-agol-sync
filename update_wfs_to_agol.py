@@ -46,9 +46,16 @@ layer = fl_item.layers[0]
 print("Truncating existing layer...")
 layer.manager.truncate()
 
-print("Uploading new data...")
-layer.edit_features(adds=sdf.spatial.to_featureset())
+print("Uploading new data in batches...")
+batch_size = 500
+features = sdf.spatial.to_featureset().features
+
+for i in range(0, len(features), batch_size):
+    batch = features[i:i + batch_size]
+    print(f"Uploading batch {i // batch_size + 1} with {len(batch)} features...")
+    layer.edit_features(adds=batch)
 
 print("✅ Update complete.")
+
 
 
