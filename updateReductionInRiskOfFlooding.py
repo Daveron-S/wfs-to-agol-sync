@@ -38,7 +38,7 @@ gdf = gdf[gdf.geometry.notnull()]
 sdf = GeoAccessor.from_geodataframe(gdf)
 
 # --- AGOL Layer Setup ---
-feature_layer_id = "c8d9ff5268b44211a767c947417bef7a"
+feature_layer_id = "c6f1279b85674af193fa316063fb9b7c"
 fl_item = gis.content.get(feature_layer_id)
 layer = fl_item.layers[0]
 
