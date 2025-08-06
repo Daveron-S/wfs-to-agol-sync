@@ -38,7 +38,7 @@ gdf = gdf[gdf.geometry.notnull()]
 sdf = GeoAccessor.from_geodataframe(gdf)
 
 # --- AGOL Layer Setup ---
-feature_layer_id = "1b3bc88f5f37407ea19641d786819977"
+feature_layer_id = "d6aadf0d813a4babab51c4104a72338b"
 fl_item = gis.content.get(feature_layer_id)
 layer = fl_item.layers[0]
 
@@ -50,4 +50,5 @@ print("Uploading new data...")
 layer.edit_features(adds=sdf.spatial.to_featureset())
 
 print("✅ Update complete.")
+
 
