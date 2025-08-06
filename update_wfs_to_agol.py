@@ -12,7 +12,7 @@ gis = GIS("https://www.arcgis.com", username, password)
 
 # --- WFS setup ---
 wfs_url = "https://environment.data.gov.uk/spatialdata/aims-structure/wfs"
-type_name = "environment-agency:aims_structure"
+type_name = "dataset-6232eb53-0573-4183-bce2-0de344cd3820:AIMS_Structure_Point"
 
 # Build valid GetFeature request
 params = {
@@ -20,7 +20,7 @@ params = {
     "version": "2.0.0",
     "request": "GetFeature",
     "typeName": type_name,
-    "outputFormat": "application/json"
+    "outputFormat": "json"
 }
 
 print("Downloading WFS data...")
@@ -50,3 +50,4 @@ print("Uploading new data...")
 layer.edit_features(adds=sdf.spatial.to_featureset())
 
 print("✅ Update complete.")
+
