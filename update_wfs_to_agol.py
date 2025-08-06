@@ -38,6 +38,14 @@ gdf = gdf[gdf.is_valid]
 # Ensure correct geometry column is active
 gdf.set_geometry("geometry", inplace=True)
 
+# --- Fix CRS ---
+if gdf.crs is None:
+    print("No CRS found. Setting to EPSG:4326 (assumed).")
+    gdf.set_crs(epsg=4326, inplace=True)
+elif gdf.crs.to_epsg() != 4326:
+    print(f"Converting CRS from {gdf.crs} to EPSG:4326...")
+    gdf = gdf.to_crs(epsg=4326)
+
 # --- Convert to Spatial DataFrame ---
 sdf = GeoAccessor.from_geodataframe(gdf)
 
@@ -69,4 +77,5 @@ for i in range(0, len(features), batch_size):
         raise RuntimeError("Some features failed to upload.")
 
 print("✅ Update complete.")
+
 
