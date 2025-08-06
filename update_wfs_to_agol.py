@@ -59,7 +59,7 @@ batch_size = 500
 features = sdf.spatial.to_featureset().features
 
 # Verify at least one feature has geometry
-assert "geometry" in features[0], "❌ Geometry missing in uploaded features."
+assert features[0].geometry is not None, "❌ Geometry missing in uploaded features."
 
 for i in range(0, len(features), batch_size):
     batch = features[i:i + batch_size]
@@ -69,3 +69,4 @@ for i in range(0, len(features), batch_size):
         raise RuntimeError("Some features failed to upload.")
 
 print("✅ Update complete.")
+
