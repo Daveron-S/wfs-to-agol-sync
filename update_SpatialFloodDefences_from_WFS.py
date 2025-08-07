@@ -46,12 +46,19 @@ elif gdf.crs.to_epsg() != 4326:
     print(f"Converting CRS from {gdf.crs} to EPSG:4326...")
     gdf = gdf.to_crs(epsg=4326)
 
+# --- Convert to Spatial DataFrame ---
+sdf = GeoAccessor.from_geodataframe(gdf)
+
 # --- AGOL Layer Setup ---
 feature_layer_id = "562680b858bd416d889818fef4e8416f"
 fl_item = gis.content.get(feature_layer_id)
+
+if fl_item is None:
+    raise ValueError("Feature layer item not found. Check the item ID.")
+
 layer = fl_item.layers[0]
 
-# Overwrite layer: truncate then add
+# --- Upload ---
 print("Truncating existing layer...")
 layer.manager.truncate()
 
@@ -59,10 +66,15 @@ print("Uploading new data in batches...")
 batch_size = 500
 features = sdf.spatial.to_featureset().features
 
+# Verify at least one feature has geometry
+assert features[0].geometry is not None, "❌ Geometry missing in uploaded features."
+
 for i in range(0, len(features), batch_size):
     batch = features[i:i + batch_size]
     print(f"Uploading batch {i // batch_size + 1} with {len(batch)} features...")
-    layer.edit_features(adds=batch)
+    result = layer.edit_features(adds=batch)
+    if "addResults" not in result or not all(f["success"] for f in result["addResults"]):
+        raise RuntimeError("Some features failed to upload.")
 
 print("✅ Update complete.")
 
