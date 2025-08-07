@@ -31,11 +31,20 @@ response.raise_for_status()  # Raise error for HTTP 4xx/5xx
 gdf = gpd.read_file(StringIO(response.text))
 print(f"Downloaded {len(gdf)} features.")
 
-# Drop features without geometry
+# --- Fix geometry ---
 gdf = gdf[gdf.geometry.notnull()]
+gdf = gdf[gdf.is_valid]
 
-# Convert to Spatially Enabled DataFrame
-sdf = GeoAccessor.from_geodataframe(gdf)
+# Ensure correct geometry column is active
+gdf.set_geometry("geometry", inplace=True)
+
+# --- Fix CRS ---
+if gdf.crs is None:
+    print("No CRS found. Setting to EPSG:4326 (assumed).")
+    gdf.set_crs(epsg=4326, inplace=True)
+elif gdf.crs.to_epsg() != 4326:
+    print(f"Converting CRS from {gdf.crs} to EPSG:4326...")
+    gdf = gdf.to_crs(epsg=4326)
 
 # --- AGOL Layer Setup ---
 feature_layer_id = "c7647810cb124f47a3224692868e1d58"
