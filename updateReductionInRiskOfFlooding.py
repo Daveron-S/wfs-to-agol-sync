@@ -51,7 +51,7 @@ feature_layer_id = "c6f1279b85674af193fa316063fb9b7c"
 fl_item = gis.content.get(feature_layer_id)
 layer = fl_item.layers[0]
 
-# Overwrite layer: truncate then add
+# Overwrite layer: truncate then add features
 print("Truncating existing layer...")
 layer.manager.truncate()
 
